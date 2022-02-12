@@ -6,7 +6,8 @@ using namespace std;
 
 void basicSearch();
 void fileSearch(int&, char* []);
-void setOptionsFlags(bool&, bool&, bool&, string&);
+void setOptionsFlags(bool&, bool&, bool&, bool&, string&);
+void stringToLowerCase(string&);
 
 int main(int argc, char* argv[])
 {
@@ -43,19 +44,6 @@ void basicSearch()
         cout << endl << "\"" << searchString << "\" NOT found in \"" << stringToSearch << "\"" << endl;
 }
 
-void setOptionsFlags(bool& lines, bool& occur, bool& reverse, string& option)
-{
-    if (option.find('o') != string::npos) {
-        occur = true;
-    }
-    if (option.find('l') != string::npos) {
-        lines = true;
-    }
-    if (option.find('r') != string::npos) {
-        reverse = true;
-    }
-}
-
 void fileSearch(int& argc, char* argv[])
 {
     string searchString;
@@ -65,6 +53,7 @@ void fileSearch(int& argc, char* argv[])
     bool showLines = false;
     bool showOccur = false;
     bool reverseSearch = false; 
+    bool caseSensitive = true;
     
     string line;
     int lineNumber = 0;
@@ -75,7 +64,11 @@ void fileSearch(int& argc, char* argv[])
         searchString = argv[2];
         fileToSearch = argv[3];
         option.erase(0, 2); // Erase the first two characters from given option because they are not needed
-        setOptionsFlags(showLines, showOccur, reverseSearch, option);
+        setOptionsFlags(showLines, showOccur, reverseSearch, caseSensitive, option);
+
+        if (!caseSensitive) {
+            stringToLowerCase(searchString);
+        }
     } else {
         searchString = argv[1];
         fileToSearch = argv[2];
@@ -136,4 +129,27 @@ void fileSearch(int& argc, char* argv[])
 
 
     ifile.close();
+}
+
+void setOptionsFlags(bool& lines, bool& occur, bool& reverse, bool& casesens, string& option)
+{
+    if (option.find('o') != string::npos) {
+        occur = true;
+    }
+    if (option.find('l') != string::npos) {
+        lines = true;
+    }
+    if (option.find('r') != string::npos) {
+        reverse = true;
+    }
+    if (option.find('i') != string::npos) {
+        casesens = false;
+    }
+}
+
+void stringToLowerCase(string& convertThis) 
+{
+    for (int i = 0; i < convertThis.size(); i++) {
+        convertThis[i] = tolower(convertThis[i]);
+    }h
 }
