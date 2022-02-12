@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <locale>
 
 using namespace std;
 
@@ -11,8 +12,7 @@ string stringToLowerCase(string);
 
 int main(int argc, char* argv[])
 {
-    setlocale(LC_ALL, "Finnish");
-    if (argc == 1) {
+    if (argc <= 2) {
         basicSearch();
     } else {
         fileSearch(argc, argv);
@@ -45,7 +45,7 @@ void basicSearch()
 void fileSearch(int& argc, char* argv[])
 {
     ifstream ifile;
-    string searchString, temp_searchString, fileToSearch, option;
+    string searchString, copy_searchString, fileToSearch, option;
 
     bool showLines = false;
     bool showOccur = false;
@@ -55,16 +55,17 @@ void fileSearch(int& argc, char* argv[])
     if (argv[1][0] == '-' && argv[1][1] == 'o') {
         option = argv[1];
         searchString = argv[2];
+        copy_searchString = argv[2];
         fileToSearch = argv[3];
         option.erase(0, 2); // Erase the first two characters from given option because they are not needed
         setOptionsFlags(showLines, showOccur, reverseSearch, caseSensitive, option);
 
         if (!caseSensitive) {
-            //temp_searchString = stringToLowerCase(searchString);
             searchString = stringToLowerCase(searchString);
         }
     } else {
         searchString = argv[1];
+        copy_searchString = argv[1];
         fileToSearch = argv[2];
     }
 
@@ -120,9 +121,9 @@ void fileSearch(int& argc, char* argv[])
     }
 
     if (showOccur && !reverseSearch) {
-        cout << endl << "Occurrences of lines containing \"" << searchString << "\": " << occurrences << endl;
+        cout << endl << "Occurrences of lines containing \"" << copy_searchString << "\": " << occurrences << endl;
     } else if (showOccur && reverseSearch) {
-        cout << endl << "Occurrences of lines NOT containing \"" << searchString << "\": " << occurrences << endl;
+        cout << endl << "Occurrences of lines NOT containing \"" << copy_searchString << "\": " << occurrences << endl;
     }
 
     ifile.close();
