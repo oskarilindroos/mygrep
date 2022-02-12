@@ -5,7 +5,7 @@
 using namespace std;
 
 void basicSearch();
-void fileSearch();
+void fileSearch(int&, char* []);
 
 int main(int argc, char* argv[])
 {
@@ -14,8 +14,8 @@ int main(int argc, char* argv[])
         case 1:
             basicSearch();
             break;
-        case 2:
-            fileSearch();
+        default:
+            fileSearch(argc, argv);
             break;
     }
 
@@ -42,7 +42,27 @@ void basicSearch()
         cout << endl << "\"" << searchString << "\" NOT found in \"" << stringToSearch << "\"" << endl;
 }
 
-void fileSearch()
+void fileSearch(int& argc, char* argv[])
 {
-    ;
+    string searchString = argv[1];
+    string fileToSearch = argv[2];
+
+    string line;
+
+    ifstream ifile;
+    ifile.open(fileToSearch);
+
+    if (ifile.fail()) {
+        cout << "File couldn't be opened" << endl;
+        return;
+    }
+
+    while (!ifile.eof()) {
+        getline(ifile, line);
+        if (line.find(searchString) != string::npos) {
+            cout << line << endl;
+        }
+    }
+
+    ifile.close();
 }
