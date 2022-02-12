@@ -11,6 +11,7 @@ string stringToLowerCase(string);
 
 int main(int argc, char* argv[])
 {
+    setlocale(LC_ALL, "Finnish");
     if (argc == 1) {
         basicSearch();
     } else {
@@ -43,6 +44,7 @@ void basicSearch()
 
 void fileSearch(int& argc, char* argv[])
 {
+    ifstream ifile;
     string searchString, temp_searchString, fileToSearch, option;
 
     bool showLines = false;
@@ -66,12 +68,17 @@ void fileSearch(int& argc, char* argv[])
         fileToSearch = argv[2];
     }
 
-    ifstream ifile;
-    ifile.open(fileToSearch);
-
-    if (ifile.fail()) {
-        cout << "File couldn't be opened" << endl;
-        return;
+    try 
+    {
+        ifile.open(fileToSearch);
+        if (ifile.fail()) {
+            throw "Could not open file \"" + fileToSearch + "\"";
+        }
+    }
+    catch (string errorMessage)
+    {
+        cout << "ERROR: \t" << errorMessage << endl;
+        exit(1);
     }
 
     int lineNumber = 0;
