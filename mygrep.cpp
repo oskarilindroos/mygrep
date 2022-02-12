@@ -7,18 +7,14 @@ using namespace std;
 void basicSearch();
 void fileSearch(int&, char* []);
 void setOptionsFlags(bool&, bool&, bool&, bool&, string&);
-void stringToLowerCase(string&);
+string stringToLowerCase(string);
 
 int main(int argc, char* argv[])
 {
-    switch (argc)
-    {
-        case 1:
-            basicSearch();
-            break;
-        default:
-            fileSearch(argc, argv);
-            break;
+    if (argc == 1) {
+        basicSearch();
+    } else {
+        fileSearch(argc, argv);
     }
 
     return 0;
@@ -38,28 +34,23 @@ void basicSearch()
 
     found = stringToSearch.find(searchString);
     
-    if (found != string::npos)
+    if (found != string::npos) {
         cout << endl << "\"" << searchString << "\" found in \"" << stringToSearch << "\" in position " << found << endl;
-    else
+    } else {
         cout << endl << "\"" << searchString << "\" NOT found in \"" << stringToSearch << "\"" << endl;
+    }
 }
 
 void fileSearch(int& argc, char* argv[])
 {
-    string searchString;
-    string fileToSearch;
-    string option;
+    string searchString, temp_searchString, fileToSearch, option;
 
     bool showLines = false;
     bool showOccur = false;
     bool reverseSearch = false; 
     bool caseSensitive = true;
     
-    string line;
-    int lineNumber = 0;
-    int occurrences = 0;
-    
-    if (argv[1][0] == '-' && argv[1][1] == 'o') { // If the first letter of the first argument is not '-'
+    if (argv[1][0] == '-' && argv[1][1] == 'o') {
         option = argv[1];
         searchString = argv[2];
         fileToSearch = argv[3];
@@ -67,7 +58,8 @@ void fileSearch(int& argc, char* argv[])
         setOptionsFlags(showLines, showOccur, reverseSearch, caseSensitive, option);
 
         if (!caseSensitive) {
-            stringToLowerCase(searchString);
+            //temp_searchString = stringToLowerCase(searchString);
+            searchString = stringToLowerCase(searchString);
         }
     } else {
         searchString = argv[1];
@@ -82,40 +74,39 @@ void fileSearch(int& argc, char* argv[])
         return;
     }
 
-    while (!ifile.eof()) 
-    {
-        getline(ifile, line);
-        lineNumber++;
-        
-        if (!reverseSearch)
-        {
-            if (line.find(searchString) != string::npos) 
-            {
-                occurrences++;
+    int lineNumber = 0;
+    int occurrences = 0;
+    string temp_line, line;
 
-                if (showLines)
-                {
-                    cout << lineNumber << ":" << line << endl;
-                } 
-                else
-                {
-                    cout << line << endl;
+    while (!ifile.eof()) {
+        getline(ifile, temp_line);
+        lineNumber++;
+
+        if (!caseSensitive) {
+            line = stringToLowerCase(temp_line);
+        } else {
+            line = temp_line;
+        }
+        
+        if (!reverseSearch) {
+            if (line.find(searchString) != string::npos) {
+                occurrences++;
+                
+                if (showLines) {
+                    cout << lineNumber << ":" << temp_line << endl;
+                }    
+                else {
+                    cout << temp_line << endl;
                 }
             }
-        }
-        else if (reverseSearch)
-        {
-            if (line.find(searchString) == string::npos) 
-            {
+        } else if (reverseSearch) {
+            if (line.find(searchString) == string::npos) {
                 occurrences++;
 
-                if (showLines)
-                {
-                    cout << lineNumber << ":" << line << endl;
-                } 
-                else
-                {
-                    cout << line << endl;
+                if (showLines) {
+                    cout << lineNumber << ":" << temp_line << endl;
+                } else {
+                    cout << temp_line << endl;
                 }
             }
         }
@@ -127,29 +118,22 @@ void fileSearch(int& argc, char* argv[])
         cout << endl << "Occurrences of lines NOT containing \"" << searchString << "\": " << occurrences << endl;
     }
 
-
     ifile.close();
 }
 
 void setOptionsFlags(bool& lines, bool& occur, bool& reverse, bool& casesens, string& option)
 {
-    if (option.find('o') != string::npos) {
-        occur = true;
-    }
-    if (option.find('l') != string::npos) {
-        lines = true;
-    }
-    if (option.find('r') != string::npos) {
-        reverse = true;
-    }
-    if (option.find('i') != string::npos) {
-        casesens = false;
-    }
+    if (option.find('o') != string::npos) occur = true;
+    if (option.find('l') != string::npos) lines = true;
+    if (option.find('r') != string::npos) reverse = true;
+    if (option.find('i') != string::npos) casesens = false;
 }
 
-void stringToLowerCase(string& convertThis) 
+string stringToLowerCase(string convertThis) 
 {
     for (int i = 0; i < convertThis.size(); i++) {
         convertThis[i] = tolower(convertThis[i]);
     }
+
+    return convertThis;
 }
