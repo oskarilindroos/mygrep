@@ -30,10 +30,10 @@ void basicSearch()
     std::string searchString;
     int found;
 
-    std::cout << "Give a std::string from which to search for: ";
+    std::cout << "Give a string from which to search for: ";
     getline(std::cin, stringToSearch);
 
-    std::cout << "Give a search std::string: ";
+    std::cout << "Give a search string: ";
     getline(std::cin, searchString);
 
     found = stringToSearch.find(searchString);
