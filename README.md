@@ -5,12 +5,11 @@ C++ clone of the command line tool "grep" on Unix. Clones the basic functionalit
 Done as a course project for *Ohjelmoinnin edistyneet piirteet*.
 
 ## Installation
----
 
 `g++ mygrep.cpp -o mygrep`
 
 ## Usage
----
+
 `./mygrep [OPTION(s)] pattern [FILE]`
 
 On Windows, use `./mygrep.exe` instead.
@@ -38,7 +37,7 @@ Give a search string: me
 "me" found in "Search me please" in position 7
 ```
 ## Options/Command line arguments
----
+
         All arguments must start with '-o' and can be combined with each other in any order. 
         For example: -oloir, -oroil, oirlo all return the same result.
 
